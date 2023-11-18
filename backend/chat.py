@@ -37,8 +37,7 @@ def chatBot(credentials,text):
     csv_filename = 'text_embeddings.csv'
     df.to_csv(csv_filename, index=False)
     query = ['give me multiple choice question about messi career then provide the correct answer']
-    print('++',type(df))
-    # askQuestion(query,df)
+    return 'success'
 
     
 def generate_batches(sentences, batch_size = 5):
@@ -63,17 +62,15 @@ def askQuestion(question,credentials):
     generation_model = TextGenerationModel.from_pretrained(
     "text-bison@001")
     start = time.time()
-    print('bbbbbb')
 
 
-    # query_embedding = embedding_model.get_embeddings(question)[0].values
     query_embedding = embedding_model.get_embeddings([question])[0].values
 
 
     lists=so_database['embeddings'].values
     embeddings = [ast.literal_eval(num) for num in lists]
     similarities = cosine_similarity([query_embedding], embeddings)[0]
-    print(similarities)
+
     so_database['similarities'] = similarities
     df_sorted = so_database.sort_values('similarities', ascending=False)
     
@@ -107,7 +104,7 @@ def askQuestion(question,credentials):
         response = generation_model.predict(prompt = prompt,
                                     temperature = t_value,
                                     max_output_tokens = 1024)
-        print('999 ',response.text)
+        return(response.text)
     
     
 
