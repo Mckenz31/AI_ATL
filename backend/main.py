@@ -81,7 +81,8 @@ Beyond the fancy tricks, what struck me most was Messi’s passion for the game.
 
 @app.get("/askChatbot")
 def askchatbot():
-   askQuestion("what teams did messi play for",credentials)
+   question='give me multiple choice question about messi career then provide the correct answer'
+   askQuestion(question,credentials)
    return ""
 
 if __name__ == "__main__":
