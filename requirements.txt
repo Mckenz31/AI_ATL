@@ -2,3 +2,4 @@ uvicorn
 fastapi
 google-cloud-speech
 vertexai
+openai
