@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/widgets/flashcards.dart';
+import 'package:frontend/widgets/quiz_openended.dart';
 
 class SummaryPage extends StatelessWidget {
   final Map<String, String> data = {
@@ -28,21 +29,26 @@ class SummaryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dynamic Article Layout'),
+        title: const Text('Dynamic Article Layout'),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(12.0),
         child: Column(
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: data.entries.map((entry) => buildItem(entry)).toList(),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => FlashCards()));
-              },
-              child: const Text(''),
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const QuizOpenEnded()));
+                  },
+                  child: const Text('Generate Flashcards'),
+                ),
+              ],
             ),
           ],
         ),
@@ -54,14 +60,14 @@ class SummaryPage extends StatelessWidget {
     if (entry.key.startsWith('title')) {
       return Text(
         entry.value,
-        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
       );
     } else if (entry.key.startsWith('heading')) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Text(
           entry.value,
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
         ),
       );
     } else {
@@ -69,7 +75,7 @@ class SummaryPage extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 8.0),
         child: Text(
           '• ${entry.value}',
-          style: TextStyle(fontSize: 16),
+          style: const TextStyle(fontSize: 16),
         ),
       );
     }
