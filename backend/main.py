@@ -1,8 +1,15 @@
 from fastapi import FastAPI, Request
 import uvicorn 
 from fastapi.middleware.cors import CORSMiddleware  # Import the CORS middleware
-import os
-import ssl
+from google.oauth2 import service_account
+from google.cloud import speech
+from audio import summarize, transcribe_audio
+
+
+client_file = 'ai-atl.json'
+credentials = service_account.Credentials.from_service_account_file(client_file)
+
+client = speech.SpeechClient(credentials=credentials)
 
 app = FastAPI()
 
