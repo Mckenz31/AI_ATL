@@ -12,10 +12,6 @@ import csv
 import numpy as np
 import ast
 from sklearn.metrics.pairwise import cosine_similarity
-
-
-
-from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 import time
 

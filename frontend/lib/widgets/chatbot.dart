@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class ChatBotPage extends StatefulWidget {
   const ChatBotPage({Key? key}) : super(key: key);
@@ -13,12 +14,35 @@ class _ChatBotPageState extends State<ChatBotPage> {
 
   TextEditingController _messageController = TextEditingController();
 
-  void _handleSubmitted(String text) {
+  void _handleSubmitted(String text) async {
     _messageController.clear();
 
     // Simulate the bot's response (you can replace this logic with your own)
 
-    _addMessage('StudyBot', 'This is a bot response.');
+    Map<String, dynamic> payloadData = {
+      'question': text,
+    };
+    try {
+    final response = await http.post(
+      Uri.parse('http://127.0.0.1:8000/askChatbot'),
+      body: jsonEncode(payloadData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      _addMessage('StudyBot', response.body);
+      print('Response: ${response.body}');
+
+    } else {
+      _addMessage('StudyBot', "I'm sorry, I failed to receive a response from the server.");
+      print('Error: ${response.statusCode}');
+
+    }
+  } catch (error) {
+    print('Error: $error');
+  }
     _addMessage('You', '$text');
 
     // You can add your own logic here to process the user's input and generate bot responses

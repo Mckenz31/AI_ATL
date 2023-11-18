@@ -33,9 +33,7 @@ def index(request: Request):
 @app.get("/quiz")
 def generateQuiz():
     return
-@app.get("/queryChatbot")
-def queryChatbot():
-    return
+
 @app.get("/createNewAudio")
 def createNewAudio():
     return
@@ -79,11 +77,13 @@ Beyond the fancy tricks, what struck me most was Messi’s passion for the game.
    return embeddings
 # to add routes follow the format above
 
-@app.get("/askChatbot")
-def askchatbot():
-   question='give me multiple choice question about messi career then provide the correct answer'
-   askQuestion(question,credentials)
-   return ""
+@app.post("/askChatbot")
+async def askchatbot(request: Request):
+   data = await request.json()
+   question = data.get("question")
+   print(question)
+   response = askQuestion(question,credentials)
+   return response
 
 if __name__ == "__main__":
    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)

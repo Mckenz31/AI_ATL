@@ -6,3 +6,5 @@ google-cloud-aiplatform
 IPython
 openai
 elevenlabs
+pandas
+scikit-learn

@@ -72,4 +72,5 @@ def main():
         mcq = generate_mcq(genModel, lecture, 10)
     print(mcq)
 
-main()
+if __name__ == "__main__":
+    main()
