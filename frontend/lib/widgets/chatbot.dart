@@ -134,9 +134,14 @@ class ChatMessage extends StatelessWidget {
                 style: Theme.of(context).textTheme.subtitle1,
               ),
               Container(
-                margin: const EdgeInsets.only(top: 5.0),
-                child: Text(text),
-              ),
+                  margin: const EdgeInsets.only(top: 5.0),
+                  child: Text(
+                    text,
+                    // Set maxLines and overflow properties to control text wrapping
+                    maxLines: 5, // Set to the desired maximum number of lines
+                    overflow: TextOverflow.ellipsis, // or TextOverflow.fade
+                  ),
+                ),
             ],
           ),
         ],

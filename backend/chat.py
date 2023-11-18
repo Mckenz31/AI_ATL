@@ -104,6 +104,7 @@ def askQuestion(question,credentials):
                                     temperature = t_value,
                                     max_output_tokens = 1024)
         print(response.text)
+        return response.text
     
     
 def upload_csv(credentials,file):
