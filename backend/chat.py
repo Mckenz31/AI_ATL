@@ -2,7 +2,7 @@
 import vertexai
 from vertexai.language_models import TextGenerationModel
 from vertexai.language_models import TextEmbeddingModel
-from google.cloud import bigquery
+from google.cloud import bigquery, storage
 import pandas as pd
 import time
 import numpy as np
@@ -12,6 +12,7 @@ import csv
 import numpy as np
 import ast
 from sklearn.metrics.pairwise import cosine_similarity
+
 
 
 from sklearn.metrics.pairwise import cosine_similarity
@@ -36,8 +37,9 @@ def chatBot(credentials,text):
     df = pd.DataFrame(data, columns=['text', 'embeddings'])
     csv_filename = 'text_embeddings.csv'
     df.to_csv(csv_filename, index=False)
-    query = ['give me multiple choice question about messi career then provide the correct answer']
-    return 'success'
+
+    return upload_csv(credentials,csv_filename)
+    # return 'success'
 
     
 def generate_batches(sentences, batch_size = 5):
@@ -107,5 +109,17 @@ def askQuestion(question,credentials):
         return(response.text)
     
     
+def upload_csv(credentials,file):
+    bucket_name='embedding_bucket_atl'
+    file_name='text_embeddings'
+    storage_client = storage.Client(credentials=credentials)
+    bucket = storage_client.bucket(bucket_name)
+    new_file = bucket.blob(file_name)
+    if new_file.exists():
+        # If the file exists, delete it
+        new_file.delete()
+    new_file.upload_from_filename(file)
+
+    return f"gs://{bucket_name}/{file_name}"
 
 
