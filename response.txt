@@ -1,0 +1,59 @@
+Question 1: What is the difference between velocity and acceleration?
+Response 1: Velocity refers to the rate at which an object changes its position, while acceleration refers to the rate at which an object changes its velocity.
+
+Question 2: Can an object have a constant velocity and still be accelerating?
+Response 2: No, an object cannot have a constant velocity and still be accelerating. Acceleration implies a change in velocity, so if velocity remains constant, there is no acceleration.
+
+Question 3: How does friction affect the motion of an object?
+Response 3: Friction opposes the motion of an object, causing it to slow down or come to a stop.
+
+Question 4: What is displacement?
+Response 4: Displacement refers to the overall change in an object's position from the starting point to the final point.
+
+Question 5: Can an object be at rest and still have a non-zero displacement?
+Response 5: Yes, an object can be at rest and still have a non-zero displacement if it has been initially displaced and then returns to its starting point.
+
+Question 6: What is the relationship between mass and inertia?
+Response 6: Mass is a measure of an object's inertia. Objects with greater mass have greater inertia and are more resistant to changes in motion.
+
+Question 7: Explain the concept of terminal velocity.
+Response 7: Terminal velocity is the maximum velocity an object can achieve while falling through a fluid (like air) when the upward force of air resistance equals the downward force of gravity.
+
+Question 8: What is the difference between speed and velocity?
+Response 8: Speed measures the magnitude of the rate at which an object covers distance, while velocity also includes the direction of motion.
+
+Question 9: How does the mass of an object affect its inertia?
+Response 9: The mass of an object directly determines its inertia. Greater mass leads to greater inertia.
+
+Question 10: Can an object have zero acceleration and still be in motion?
+Response 10: Yes, an object can have zero acceleration and still be in motion if its velocity is constant.
+
+Question 11: What does it mean for an object to have uniform motion?
+Response 11: Uniform motion refers to an object moving with constant speed and in a straight line, without any changes in its velocity.
+
+Question 12: How is deceleration different from negative acceleration?
+Response 12: Deceleration specifically refers to a decrease in velocity, while negative acceleration can occur when an object's velocity decreases or changes direction.
+
+Question 13: What is gravitational force?
+Response 13: Gravitational force is the force of attraction between two objects with mass. It is responsible for the phenomenon of weight and the motion of celestial bodies.
+
+Question 14: Is an object's weight the same as its mass?
+Response 14: No, an object's weight and mass are different. Weight is the force exerted on an object due to gravity, while mass is a measure of the amount of matter in an object.
+
+Question 15: How does an object's center of mass affect its stability?
+Response 15: The lower an object's center of mass, the more stable it is. Objects with a higher center of mass are more likely to topple over.
+
+Question 16: What is the relationship between force, mass, and acceleration?
+Response 16: Newton's second law of motion states that force is directly proportional to mass and acceleration: F = m * a.
+
+Question 17: How does air resistance affect the motion of falling objects?
+Response 17: Air resistance opposes the motion of a falling object, increasing with the object's velocity until reaching a point of balance, called terminal velocity.
+
+Question 18: Can an object have zero net force acting on it and still be in motion?
+Response 18: Yes, an object with zero net force acting on it can still be in motion if other forces cancel out, resulting in a balanced force situation.
+
+Question 19: What is the difference between elastic and inelastic collisions?
+Response 19: In an elastic collision, kinetic energy is conserved, while in an inelastic collision, kinetic energy is not conserved. Inelastic collisions generally involve energy being transformed into other forms, such as heat or sound.
+
+Question 20: How does the coefficient of restitution relate to the elasticity of a collision?
+Response 20: The coefficient of restitution quantifies the elasticity of a collision. It is a ratio of the relative velocity of separation to the relative velocity of approach between two objects during a collision.
