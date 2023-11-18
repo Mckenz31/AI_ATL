@@ -12,15 +12,16 @@ credentials = service_account.Credentials.from_service_account_file(client_file)
 
 client = speech.SpeechClient(credentials=credentials)
 
-def transcribe_audio(client, credentials):
+def transcribe_audio(client: speech.SpeechClient):
     audio_file = 'preamble.wav'
     with io.open(audio_file, 'rb') as f:
         content = f.read()
-        audio = speech.RecognitionAudio(uri="gs://ai_atl_audio/harvard.wav")
+        audio = speech.RecognitionAudio(uri="gs://ai_atl_audio/test.mp3")
 
     config = speech.RecognitionConfig(
-        encoding=speech.RecognitionConfig.AudioEncoding.ENCODING_UNSPECIFIED,
-        sample_rate_hertz=48000,
+        encoding=speech.RecognitionConfig.AudioEncoding.MP3,
+        enable_automatic_punctuation=True,
+        sample_rate_hertz=44100,
         language_code="en-US",
     )
     operation = client.long_running_recognize(config=config, audio=audio)
@@ -70,5 +71,8 @@ def create_new_audio(text):
     )
     play(audio)
 
-summary = summarize(credentials)
-create_new_audio(summary)
+# summary = summarize(credentials)
+# create_new_audio(summary)
+
+
+transcribe_audio(client)
