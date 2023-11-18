@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flash_card/flash_card.dart';
-import 'package:frontend/data/fake_data.dart';
+import 'package:frontend/data/data.dart';
 
 class FlashCards extends StatefulWidget {
   const FlashCards({super.key});
