@@ -38,7 +38,7 @@ def chatBot(credentials,text):
     csv_filename = 'text_embeddings.csv'
     df.to_csv(csv_filename, index=False)
 
-    return upload_csv(credentials,csv_filename)
+    # return upload_csv(credentials,csv_filename)
     # return 'success'
 
     
@@ -58,6 +58,7 @@ def encode_texts_to_embeddings(sentences):
 
 def askQuestion(question,credentials):
     vertexai.init(project=PROJECT_ID, location=REGION, credentials = credentials)
+    so_database = download_file(credentials)
     so_database = pd.read_csv('text_embeddings.csv')
     embedding_model = TextEmbeddingModel.from_pretrained(
     "textembedding-gecko@001")
@@ -106,12 +107,12 @@ def askQuestion(question,credentials):
         response = generation_model.predict(prompt = prompt,
                                     temperature = t_value,
                                     max_output_tokens = 1024)
-        return(response.text)
+        print(response.text)
     
     
 def upload_csv(credentials,file):
     bucket_name='embedding_bucket_atl'
-    file_name='text_embeddings'
+    file_name='text_embeddings.csv'
     storage_client = storage.Client(credentials=credentials)
     bucket = storage_client.bucket(bucket_name)
     new_file = bucket.blob(file_name)
@@ -123,3 +124,15 @@ def upload_csv(credentials,file):
     return f"gs://{bucket_name}/{file_name}"
 
 
+def download_file(credentials):
+    """Downloads a file from the bucket."""
+    storage_client = storage.Client(credentials=credentials)
+    bucket_name='embedding_bucket_atl'
+    file_name='text_embeddings.csv'
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(file_name)
+    
+    # Download the file to the local directory
+    blob.download_to_filename(file_name)
+    
+    return f"Downloaded {file_name} to {file_name}"
