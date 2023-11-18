@@ -5,7 +5,6 @@ from google.oauth2 import service_account
 from google.cloud import speech
 from audio import summarize, transcribe_audio
 
-
 client_file = 'ai-atl.json'
 credentials = service_account.Credentials.from_service_account_file(client_file)
 
@@ -24,6 +23,27 @@ app.add_middleware(
 @app.post("/")
 def index(request: Request):
    return
+
+@app.get("/summary")
+def getSummary():
+   return
+
+@app.get("/transcript")
+def getTranscript():
+    return
+
+@app.get("/quiz")
+def generateQuiz():
+    return
+@app.get("/queryChatbot")
+def queryChatbot():
+    return
+@app.get("/createNewAudio")
+def createNewAudio():
+    return
+@app.post("/addFileToCloud")
+def addFileToCloudStorage():
+    return
 
 # to add routes follow the format above
 
