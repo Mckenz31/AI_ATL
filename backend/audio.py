@@ -47,7 +47,8 @@ def transcribe_audio(client: speech.SpeechClient, location: str="gs://ai_atl_aud
 
 def summarize(credentials, bucket_name, file_name):
     transcription = get_text_from_storage(credentials, bucket_name, file_name)
-
+    # transcription = "My name is Finn Bledsoe and I'm going to be talking about why I think react is way better than vanilla JavaScript. First off react is component base, which is allows for much better organization. It allows to basically Blends book JavaScript and HTML into one file, which is just very nice and it give you all sorts of different things like States like All sorts of cool things but I'm also going to argue why Swift is way better than JavaScript and that is because Swift all of Handler functions for handling states are gone. All you have to do is pass findings in just way better and I think of that Swift is ultimately way Superior to react."
+    print(len(transcription))
     vertexai.init(project="ai-atl-405503", location="us-central1", credentials=credentials)
     parameters = {
         "candidate_count": 1,
@@ -58,25 +59,24 @@ def summarize(credentials, bucket_name, file_name):
     }
     model = TextGenerationModel.from_pretrained("text-bison")
     length = 50
-    # text = "The efficient-market hypothesis (EMH) is a hypothesis in financial economics that states that asset prices reflect all available information. A direct implication is that it is impossible to \"beat the market\" consistently on a risk-adjusted basis since market prices should only react to new information. Because the EMH is formulated in terms of risk adjustment, it only makes testable predictions when coupled with a particular model of risk. As a result, research in financial economics since at least the 1990s has focused on market anomalies, that is, deviations from specific models of risk. The idea that financial market returns are difficult to predict goes back to Bachelier, Mandelbrot, and Samuelson, but is closely associated with Eugene Fama, in part due to his influential 1970 review of the theoretical and empirical research. The EMH provides the basic logic for modern risk-based theories of asset prices, and frameworks such as consumption-based asset pricing and intermediary asset pricing can be thought of as the combination of a model of risk with the EMH. Many decades of empirical research on return predictability has found mixed evidence. Research in the 1950s and 1960s often found a lack of predictability (e.g. Ball and Brown 1968; Fama, Fisher, Jensen, and Roll 1969), yet the 1980s-2000s saw an explosion of discovered return predictors (e.g. Rosenberg, Reid, and Lanstein 1985; Campbell and Shiller 1988; Jegadeesh and Titman 1993). Since the 2010s, studies have often found that return predictability has become more elusive, as predictability fails to work out-of-sample (Goyal and Welch 2008), or has been weakened by advances in trading technology and investor learning."
     response = model.predict(
-        f"""Provide a summary approximately {length}% of the original length of the following test: {transcription}""",
+        f"""You will be given a full length transcribed lecture or educational excerpt. Consolidate the text to be approximately {length}% of the original length of the following text, while maintaining the original feel of the initial input: {transcription}""",
         **parameters
     )
+    print(len(response.text))
     return response.text
 
 
-def create_new_audio(text):
+def clone_audio(file_name):
     voice=clone(
         name="Finn",
-        files=["train.mp3", "test.mp3"]
+        files=[file_name]
     )
-    audio = generate(text="Hi, my name is Finn! This is a clone of him!", voice=voice)
+    return voice
 
+def speak_summary(summary, voice):
+    audio = generate(text=summary, voice=voice)
     play(audio)
 
-# summary = summarize(credentials)
-# create_new_audio(summary)
-
 if __name__ == "__main__":
-    create_new_audio("")
+    print(summarize(credentials, "", ""))
