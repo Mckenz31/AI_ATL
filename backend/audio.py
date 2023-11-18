@@ -12,11 +12,11 @@ credentials = service_account.Credentials.from_service_account_file(client_file)
 
 client = speech.SpeechClient(credentials=credentials)
 
-def transcribe_audio(client: speech.SpeechClient):
+def transcribe_audio(client: speech.SpeechClient, location: str="gs://ai_atl_audio/test.mp3"):
     audio_file = 'preamble.wav'
     with io.open(audio_file, 'rb') as f:
         content = f.read()
-        audio = speech.RecognitionAudio(uri="gs://ai_atl_audio/test.mp3")
+        audio = speech.RecognitionAudio(uri=location)
 
     config = speech.RecognitionConfig(
         encoding=speech.RecognitionConfig.AudioEncoding.MP3,
@@ -74,5 +74,5 @@ def create_new_audio(text):
 # summary = summarize(credentials)
 # create_new_audio(summary)
 
-
-transcribe_audio(client)
+if __name__ == "__main__":
+    transcribe_audio(client)

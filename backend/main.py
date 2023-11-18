@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware  # Import the CORS middleware
 from google.oauth2 import service_account
 from google.cloud import speech
 from audio import summarize, transcribe_audio
+from transcripts import upload_file
 
 client_file = 'ai-atl.json'
 credentials = service_account.Credentials.from_service_account_file(client_file)
@@ -41,9 +42,13 @@ def queryChatbot():
 @app.get("/createNewAudio")
 def createNewAudio():
     return
+
 @app.post("/addFileToCloud")
-def addFileToCloudStorage():
-    return
+async def addFileToCloudStorage(request: Request):
+    data = await request.json()
+    file_name = data.get("file_name")
+    location = upload_file(credentials=credentials, file_name=file_name)
+    return {"location":location}
 
 # to add routes follow the format above
 

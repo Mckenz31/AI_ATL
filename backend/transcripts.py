@@ -1,16 +1,15 @@
 from google.cloud import storage
 
-def upload_file(credentials, source_file_name):
+def upload_file(credentials, file_name):
     """Uploads a file to the bucket."""
     storage_client = storage.Client(credentials=credentials)
-    bucket = storage_client.bucket("ai-atl-transcriptions")
-    new_file = bucket.blob("random")
+    bucket_name = "ai-atl-transcriptions"
+    bucket = storage_client.bucket(bucket_name)
+    new_file = bucket.blob(file_name)
 
-    new_file.upload_from_filename("temp_text.txt")
+    new_file.upload_from_filename(file_name)
 
-    print(
-        f"File {source_file_name} uploaded to {'ai-atl-transcriptions'}."
-    )
+    return f"gs://{bucket_name}/{file_name}"
 
 def get_text_from_storage(location):
     with open('data.txt', 'r') as file:
