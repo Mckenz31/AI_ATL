@@ -10,6 +10,7 @@ import nltk
 import pickle
 import csv
 import numpy as np
+import ast
 from sklearn.metrics.pairwise import cosine_similarity
 
 
@@ -51,6 +52,7 @@ Beyond the fancy tricks, what struck me most was Messi’s passion for the game.
     csv_filename = 'text_embeddings.csv'
     df.to_csv(csv_filename, index=False)
     query = ['give me multiple choice question about messi career then provide the correct answer']
+    print('++',type(df))
     askQuestion(query,df)
 
     
@@ -69,6 +71,7 @@ def encode_texts_to_embeddings(sentences):
 #Q&A
 
 def askQuestion(question,so_database):
+    so_database = pd.read_csv('text_embeddings.csv')
     embedding_model = TextEmbeddingModel.from_pretrained(
     "textembedding-gecko@001")
     generation_model = TextGenerationModel.from_pretrained(
@@ -76,9 +79,11 @@ def askQuestion(question,so_database):
     start = time.time()
 
     query_embedding = embedding_model.get_embeddings(question)[0].values
+    # print('==',(so_database['embeddings'].values))
 
 
-    embeddings = so_database['embeddings'].values.tolist()
+    lists=so_database['embeddings'].values
+    embeddings = [ast.literal_eval(num) for num in lists]
     similarities = cosine_similarity([query_embedding], embeddings)[0]
     print(similarities)
     so_database['similarities'] = similarities
