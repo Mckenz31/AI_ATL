@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware  # Import the CORS middleware
 from google.oauth2 import service_account
 from google.cloud import speech
 from chat import chatBot,askQuestion
+from transcripts import get_text_from_storage 
 
 
 from audio import summarize, transcribe_audio, speak_summary, clone_audio
@@ -74,16 +75,17 @@ Watching Messi weave through opposing players, I was inspired to go out to the c
 
 Beyond the fancy tricks, what struck me most was Messi’s passion for the game. Even with his shy demeanor off the field, he played with sheer joy that was contagious to watch. Seeing the childlike grin on his face after scoring a goal, you could tell that he loved playing soccer simply for the sake of playing. At a time when many star athletes are accused of just being in it for the money and fame, Messi’s authentic love for soccer was special.
 
-"""
-   embeddings = chatBot(credentials,text)
+   """
+   text = get_text_from_storage(credentials,"ai-atl-transcriptions","transcription_train.txt") #Todo change this txt
+   embeddings = chatBot(credentials,text.decode('utf-8'))
    return embeddings
 # to add routes follow the format above
 
 @app.get("/askChatbot")
 def askchatbot():
-   question='give me multiple choice question about messi career then provide the correct answer'
+   question='what is code together about'
    askQuestion(question,credentials)
-   return ""
+   return askQuestion(question,credentials)
 
 if __name__ == "__main__":
    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
