@@ -2,7 +2,7 @@
 import vertexai
 from vertexai.language_models import TextGenerationModel
 from vertexai.language_models import TextEmbeddingModel
-from google.cloud import bigquery
+from google.cloud import bigquery, storage
 import pandas as pd
 import time
 import numpy as np
@@ -12,6 +12,7 @@ import csv
 import numpy as np
 import ast
 from sklearn.metrics.pairwise import cosine_similarity
+
 
 
 from sklearn.metrics.pairwise import cosine_similarity
@@ -26,34 +27,19 @@ PROJECT_ID ="ai-atl-405503"
 
 def chatBot(credentials,text):
     vertexai.init(project=PROJECT_ID, location=REGION, credentials = credentials)
-
-    my_text = """
-Leo Messi: More Than Just a Soccer Player 
-
-Growing up in Argentina, soccer was a way of life. Every kid dreamed of being the next Diego Maradona and bringing glory to the national team. For me, that player was Lionel Messi. From a young age, Messi captured my imagination with his incredible skill on the ball and seemingly effortless ability to breeze past defenders. He played the game in a way I had never seen before. 
-
-Watching Messi weave through opposing players, I was inspired to go out to the concrete soccer field near my house and try to imitate his fancy footwork and creative dribbling. I would spend hours out there practicing Messi’s signature moves, trying to perfect that special connection between mind and body that allowed him to pull off his magical plays. Though I didn’t come close to achieving Messi’s mastery, his style of play opened my eyes to what was possible on the soccer field.
-
-Beyond the fancy tricks, what struck me most was Messi’s passion for the game. Even with his shy demeanor off the field, he played with sheer joy that was contagious to watch. Seeing the childlike grin on his face after scoring a goal, you could tell that he loved playing soccer simply for the sake of playing. At a time when many star athletes are accused of just being in it for the money and fame, Messi’s authentic love for soccer was special.
-
-"""
-    sentences = nltk.sent_tokenize(my_text)  
+    sentences = nltk.sent_tokenize(text)  
     batches = generate_batches(sentences = sentences)  
     batch=next(batches)
-    print(len(batch))
 
 
     batch_embeddings = encode_texts_to_embeddings(batch)
-    print(len(batch_embeddings))
-    print(len(batch_embeddings[0]))
     data = list(zip(batch, batch_embeddings))
     df = pd.DataFrame(data, columns=['text', 'embeddings'])
-    print(df)
     csv_filename = 'text_embeddings.csv'
     df.to_csv(csv_filename, index=False)
-    query = ['give me multiple choice question about messi career then provide the correct answer']
-    print('++',type(df))
-    askQuestion(query,df)
+
+    return upload_csv(credentials,csv_filename)
+    # return 'success'
 
     
 def generate_batches(sentences, batch_size = 5):
@@ -70,7 +56,8 @@ def encode_texts_to_embeddings(sentences):
 
 #Q&A
 
-def askQuestion(question,so_database):
+def askQuestion(question,credentials):
+    vertexai.init(project=PROJECT_ID, location=REGION, credentials = credentials)
     so_database = pd.read_csv('text_embeddings.csv')
     embedding_model = TextEmbeddingModel.from_pretrained(
     "textembedding-gecko@001")
@@ -78,14 +65,14 @@ def askQuestion(question,so_database):
     "text-bison@001")
     start = time.time()
 
-    query_embedding = embedding_model.get_embeddings(question)[0].values
-    # print('==',(so_database['embeddings'].values))
+
+    query_embedding = embedding_model.get_embeddings([question])[0].values
 
 
     lists=so_database['embeddings'].values
     embeddings = [ast.literal_eval(num) for num in lists]
     similarities = cosine_similarity([query_embedding], embeddings)[0]
-    print(similarities)
+
     so_database['similarities'] = similarities
     df_sorted = so_database.sort_values('similarities', ascending=False)
     
@@ -119,9 +106,20 @@ def askQuestion(question,so_database):
         response = generation_model.predict(prompt = prompt,
                                     temperature = t_value,
                                     max_output_tokens = 1024)
-        print('999 ',response.text)
+        return(response.text)
     
     
-    # Add similarities as a new column in the DataFrame
+def upload_csv(credentials,file):
+    bucket_name='embedding_bucket_atl'
+    file_name='text_embeddings'
+    storage_client = storage.Client(credentials=credentials)
+    bucket = storage_client.bucket(bucket_name)
+    new_file = bucket.blob(file_name)
+    if new_file.exists():
+        # If the file exists, delete it
+        new_file.delete()
+    new_file.upload_from_filename(file)
+
+    return f"gs://{bucket_name}/{file_name}"
 
 

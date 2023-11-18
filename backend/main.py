@@ -75,13 +75,14 @@ Watching Messi weave through opposing players, I was inspired to go out to the c
 Beyond the fancy tricks, what struck me most was Messi’s passion for the game. Even with his shy demeanor off the field, he played with sheer joy that was contagious to watch. Seeing the childlike grin on his face after scoring a goal, you could tell that he loved playing soccer simply for the sake of playing. At a time when many star athletes are accused of just being in it for the money and fame, Messi’s authentic love for soccer was special.
 
 """
-   chatBot(credentials,text)
-   return ""
+   embeddings = chatBot(credentials,text)
+   return embeddings
 # to add routes follow the format above
 
 @app.get("/askChatbot")
 def askchatbot():
-   askQuestion("what teams did messi play for",credentials)
+   question='give me multiple choice question about messi career then provide the correct answer'
+   askQuestion(question,credentials)
    return ""
 
 if __name__ == "__main__":
