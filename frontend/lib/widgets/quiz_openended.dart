@@ -48,7 +48,7 @@ class _QuizOpenEndedState extends State<QuizOpenEnded> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://127.0.0.1:8000/mcq'),
+        Uri.parse('http://192.168.56.1:8000/mcq'),
         body: jsonEncode(payloadData),
         headers: {
           'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ class _QuizOpenEndedState extends State<QuizOpenEnded> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://127.0.0.1:8000/openEnded'),
+        Uri.parse('http://192.168.56.1:8000/openEnded'),
         body: jsonEncode(payloadData),
         headers: {
           'Content-Type': 'application/json',

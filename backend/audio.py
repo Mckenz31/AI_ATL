@@ -7,7 +7,7 @@ from google.oauth2 import service_account
 from transcripts import get_text_from_storage
 set_api_key("11c304ce9a726a86acdd07932edf9d97")
 
-client_file = 'ai-atl.json'
+client_file = '../ai-atl.json'
 credentials = service_account.Credentials.from_service_account_file(client_file)
 
 client = speech.SpeechClient(credentials=credentials)

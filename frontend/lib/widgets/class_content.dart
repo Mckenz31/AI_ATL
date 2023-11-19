@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/data/dashboard_model.dart';
+import 'package:frontend/widgets/chatbot.dart';
 import 'package:frontend/widgets/flashcards.dart';
 import 'package:frontend/widgets/generate_quiz.dart';
 import 'package:frontend/widgets/mini-pages/generate_summary.dart';
@@ -109,8 +110,8 @@ class _CardWidgetState extends State<CardWidget> {
             context: context,
             builder: ((ctx) => const GenerateQuiz()),
           );
-        } else {
-          //
+        } else if (widget.text == "Chatbot") {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ChatBotPage()));
         }
       },
       child: Card(

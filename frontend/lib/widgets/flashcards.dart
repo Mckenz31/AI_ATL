@@ -35,7 +35,7 @@ class _FlashCardsState extends State<FlashCards> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://127.0.0.1:8000/flashcards'),
+        Uri.parse('http://192.168.56.1:8000/flashcards'),
         body: jsonEncode(payloadData),
         headers: {
           'Content-Type': 'application/json',

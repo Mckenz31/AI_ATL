@@ -11,7 +11,7 @@ from transcripts import get_text_from_storage
 from audio import summarize, transcribe_audio, speak_summary, clone_audio
 from transcripts import upload_file, write_text_to_file, get_text_from_storage
 
-client_file = 'ai-atl.json'
+client_file = '../ai-atl.json'
 credentials = service_account.Credentials.from_service_account_file(client_file)
 
 client = speech.SpeechClient(credentials=credentials)
