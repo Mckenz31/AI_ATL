@@ -42,7 +42,7 @@ def chatBot(credentials,text):
     return 'success'
 
     
-def generate_batches(sentences, batch_size = 5):
+def generate_batches(sentences, batch_size = 10):
     for i in range(0, len(sentences), batch_size):
         yield sentences[i : i + batch_size]
 def encode_texts_to_embeddings(sentences):
@@ -103,7 +103,6 @@ def askQuestion(question,credentials):
     response = generation_model.predict(prompt = prompt,
                                     temperature = t_value,
                                     max_output_tokens = 1024)
-    print('00',response.text)
     return response.text
     
     
