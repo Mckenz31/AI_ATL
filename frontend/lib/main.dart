@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
 import "package:frontend/widgets/flashcards.dart";
+import "package:frontend/widgets/dashboard.dart";
+import "package:frontend/widgets/file_upload.dart";
 import "package:frontend/widgets/quiz_openended.dart";
 import "package:frontend/widgets/chatbot.dart";
 
@@ -20,7 +22,7 @@ void main() {
       theme:
       ThemeData().copyWith(useMaterial3: true, colorScheme: kColorScheme),
       debugShowCheckedModeBanner: false,
-      home: const QuizOpenEnded(),
+      home: const DashBoard(),
     ),
   );
 }

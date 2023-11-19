@@ -43,8 +43,8 @@ class SummaryPage extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const QuizOpenEnded()));
+                    // Navigator.of(context).push(MaterialPageRoute(
+                    //     builder: (context) => const QuizOpenEnded()));
                   },
                   child: const Text('Generate Flashcards'),
                 ),

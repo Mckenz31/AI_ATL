@@ -2,13 +2,10 @@
 import vertexai
 from vertexai.language_models import TextGenerationModel
 from vertexai.language_models import TextEmbeddingModel
-from google.cloud import bigquery, storage
+from google.cloud import storage
 import pandas as pd
 import time
-import numpy as np
 import nltk
-import pickle
-import csv
 import numpy as np
 import ast
 from sklearn.metrics.pairwise import cosine_similarity
@@ -34,11 +31,11 @@ def chatBot(credentials,text):
     csv_filename = 'text_embeddings.csv'
     df.to_csv(csv_filename, index=False)
 
-    # return upload_csv(credentials,csv_filename)
-    # return 'success'
+    return upload_csv(credentials,csv_filename)
+    return 'success'
 
     
-def generate_batches(sentences, batch_size = 5):
+def generate_batches(sentences, batch_size = 10):
     for i in range(0, len(sentences), batch_size):
         yield sentences[i : i + batch_size]
 def encode_texts_to_embeddings(sentences):
@@ -88,23 +85,18 @@ def askQuestion(question,credentials):
         # Else add it to the text that is being returned
         returns.append(row["text"])
         xx= "\n\n###\n\n".join(returns)
-        print(xx)
+        # print(xx)
 
-        context = xx + \
-        "\n Answer: " + xx
-        prompt = f"""Here is the context: {context}
-             Using the relevant information from the context,
-             provide an answer to the query: {question}."
-             If the context doesn't provide \
-             any relevant information, answer with 
-             [I couldn't find a good answer]
-             """
-        t_value = 0.2
-        response = generation_model.predict(prompt = prompt,
+    context = xx 
+    print('++',context)
+    prompt = f"""Imagine you are an expert teaching assistant answering a student's question. The student asks: {question} 
+    The relevant lecture context is: {context}  
+    Using only the information provided, please answer the student's question in a helpful and explanatory way. If the context does not contain enough information to answer the question, respond with ["I'm sorry, I don't have enough information to answer that fully. Let me know if you need any clarification or have additional questions!"]."""
+    t_value = 0.2
+    response = generation_model.predict(prompt = prompt,
                                     temperature = t_value,
                                     max_output_tokens = 1024)
-        print(response.text)
-        return response.text
+    return response.text
     
     
 def upload_csv(credentials,file):
