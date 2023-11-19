@@ -73,17 +73,20 @@ def generate_mcq(credentials,lecture: str, num_of_mcq: int = 20):
 
     return result
 
-def validate_open_answer(genModel: TextEmbeddingModel, lecture: str, question: str, answer):
+def validate_open_answer(credentials, lecture: str, question: str, answer):
+    vertexai.init(project="ai-atl-405503", location="us-central1", credentials=credentials)
+    genModel = TextGenerationModel.from_pretrained("text-bison@001")
     response = genModel.predict(
         f"""Background: You are a college professor who gave this lecture : {lecture}\
             Based on the content in the lecture, is this answer: {answer} valid for the question: {question}? \
-            Say "yes" or "no" and explain why
+            Give about one sentence of feedback on that answer, BUT NO MORE THAN TWO SENTENCES, for instance: That answer is not quite right, a valence electron is the outermost electron in an atom, not the innermost.
             """,
         temperature=0,
         max_output_tokens=1024,
         top_k=1,
         top_p=1,
     )
+    print(response.text)
     return response.text
 def main():
     vertexai.init(project=PROJECT_ID, location=REGION)
