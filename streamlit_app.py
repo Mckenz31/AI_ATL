@@ -56,26 +56,26 @@ def add_new_flashcard():
     flashcard_name = st.text_input("Lesson Name", value=st.session_state.lesson_name)
     flashcard_date = st.date_input("Lesson Date", value=datetime.date.today())
 
-    # if st.button("Add Lesson"):
-    #     new_flashcard = {
-    #         "name": flashcard_name,
-    #         "date": flashcard_date.strftime("%Y-%m-%d")
-    #     }
+    if st.button("Add Lesson"):
+        new_flashcard = {
+            "name": flashcard_name,
+            "date": flashcard_date.strftime("%Y-%m-%d")
+        }
 
-    #     with placeholder:
-    #         with st.expander(f"Lesson '{new_flashcard['name']}' added on {new_flashcard['date']}", expanded=True):
-    #             st.markdown(
-    #                 f"""
-    #                 <div style="background-color: #949494; color: white; padding: 10px; border-radius: 5px;">
-    #                     <h3 style="font-size: 29px;">{new_flashcard['name']}</h3>
-    #                     <p style="font-size: 16px;">Date: {new_flashcard['date']}</p>
-    #                 </div>
-    #                 """,
-    #                 unsafe_allow_html=True
-    #             )
+        with placeholder:
+            with st.expander(f"Lesson '{new_flashcard['name']}' added on {new_flashcard['date']}", expanded=True):
+                st.markdown(
+                    f"""
+                    <div style="background-color: #949494; color: white; padding: 10px; border-radius: 5px;">
+                        <h3 style="font-size: 29px;">{new_flashcard['name']}</h3>
+                        <p style="font-size: 16px;">Date: {new_flashcard['date']}</p>
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
 
-    #     # Update the state of the input field to clear it
-    #     st.session_state.lesson_name = ""
+        # Update the state of the input field to clear it
+        st.session_state.lesson_name = ""
                 
 def generate_quiz_results():
     # Example quiz results data
