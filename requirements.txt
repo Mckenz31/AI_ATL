@@ -6,4 +6,5 @@ google-cloud-aiplatform
 IPython
 openai
 elevenlabs
-streamlit
+streamlitpandas
+scikit-learn

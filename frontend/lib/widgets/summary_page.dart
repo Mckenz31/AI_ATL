@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/widgets/flashcards.dart';
-import 'package:frontend/widgets/quiz_openended.dart';
 
-class SummaryPage extends StatelessWidget {
+class SummaryPage extends StatefulWidget {
+
+  const SummaryPage({super.key, required this.percentage});
+
+  final int percentage;
+
+  @override
+  State<SummaryPage> createState() => _SummaryPageState();
+}
+
+class _SummaryPageState extends State<SummaryPage> {
   final Map<String, String> data = {
     "title1": "Technical competetions",
     "heading": "AI ATL was great",
@@ -43,8 +51,8 @@ class SummaryPage extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const QuizOpenEnded()));
+                    // Navigator.of(context).push(MaterialPageRoute(
+                    //     builder: (context) => const QuizOpenEnded()));
                   },
                   child: const Text('Generate Flashcards'),
                 ),

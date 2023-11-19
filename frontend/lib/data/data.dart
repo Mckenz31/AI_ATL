@@ -50,4 +50,5 @@ class FakeData {
      'green': 'Yes, Widgets in Flutter are components that are used to describe the UI of the app. They can be either Stateful or Statless, with Stateful widgets rebuilding when their state changes',
      'red': 'Dart is not the same as C# and Java, it differs from it in several ways including type inference, default values being null for most data types, and so on'
   };
+
 }

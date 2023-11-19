@@ -2,14 +2,16 @@ import vertexai
 from vertexai.preview.language_models import (ChatModel, InputOutputTextPair,
                                               TextEmbeddingModel,
                                               TextGenerationModel)
-
-PROJECT_ID = "graphite-space-405515" 
+import json
+PROJECT_ID = "ai-atl-405503" 
 REGION = "us-central1"
 
-def generate_open_questions(genModel: TextEmbeddingModel, lecture: str, number_of_quiz: int = 20):
+def generate_open_questions(credentials,lecture: str, number_of_questions: int = 20):
+    vertexai.init(project="ai-atl-405503", location="us-central1", credentials=credentials)
+    genModel = TextGenerationModel.from_pretrained("text-bison@001")
     response = genModel.predict(
         f"""Background: You are a college professor who gave this lecture : {lecture}\
-            Generate {number_of_quiz} or less quiz questions based on this lecture.\
+            Generate {number_of_questions} or less quiz questions based on this lecture.\
             Give well elaborated questions, one question per line. No extra formatting, just the questions
             """,
         temperature=0,
@@ -20,7 +22,9 @@ def generate_open_questions(genModel: TextEmbeddingModel, lecture: str, number_o
     questions:str = response.text
     return questions.split("\n")
 
-def generate_flash_cards(genModel: TextEmbeddingModel, lecture: str, number_of_cards: int = 20):
+def generate_flash_cards(credentials,lecture: str, number_of_cards: int = 20):
+    vertexai.init(project="ai-atl-405503", location="us-central1", credentials=credentials)
+    genModel = TextGenerationModel.from_pretrained("text-bison@001")
     response = genModel.predict(
         f"""Background: You are a college professor who gave this lecture : {lecture}\
             Generate {number_of_cards} or less flash card content based on this lecture.\
@@ -34,22 +38,40 @@ def generate_flash_cards(genModel: TextEmbeddingModel, lecture: str, number_of_c
         top_k=1,
         top_p=1,
     )
-    return response.text.split("\n")
-def generate_mcq(genModel: TextEmbeddingModel, lecture: str, num_of_mcq: int = 20):
+
+    flashcards = response.text.split("\n")
+    result = []
+    for card in flashcards:
+        result.append(card.split(" : "))
+
+    return result
+
+def generate_mcq(credentials,lecture: str, num_of_mcq: int = 20):
+    vertexai.init(project="ai-atl-405503", location="us-central1", credentials=credentials)
+    genModel = TextGenerationModel.from_pretrained("text-bison@001")
     response = genModel.predict(
         f"""Background: You are a college professor who gave this lecture : {lecture}\
-            Generate {num_of_mcq} or less multiple choice questions based on this lecture.\
-            Give the questions in this format: Question : choices : answer
-            For example, Which god is the most powerful in Greek mythology? : A Hermes B Athena C Zeus D Apollo : C) \
-            Give one question per line
+            Generate {num_of_mcq} multiple choice questions based on this lecture. There must be three CLEAR incorrect answers, and one CLEAR correct answer. \
+            Give the questions formatted like so: Some question, The, Choices, All, Four, The answer
+            For example: Which god is the most powerful in Greek mythology?, Hermes, Athena, Zeus, Apollo, Zeus \
+            Give one question per line, no extra formattings.
             """,
-        temperature=0,
+        temperature=0.2,
         max_output_tokens=1024,
         top_k=1,
         top_p=1,
     )
     questions:str = response.text
-    return questions.split("\n")
+    result = []
+    for question in questions.split("\n"):
+        question = question.strip()
+        split = question.split(", ")
+        quest = split[0]
+        answer = split[-1]
+        choices = split[1:-1]
+        result.append([quest, choices, answer])
+
+    return result
 
 def validate_open_answer(genModel: TextEmbeddingModel, lecture: str, question: str, answer):
     response = genModel.predict(
@@ -79,4 +101,5 @@ def main():
     validation = validate_open_answer(genModel, lecture, question, answer)
     print(validation)
 
-main()
+if __name__ == "__main__":
+    main()
