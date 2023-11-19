@@ -84,7 +84,7 @@ class _DashBoardState extends State<DashBoard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SimpliLearn'),
+        title: const Text('Rewind.io'),
       ),
       drawer: const Hamburger(),
       body: Container(

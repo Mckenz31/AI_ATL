@@ -120,7 +120,7 @@ class _QuizOpenEndedState extends State<QuizOpenEnded> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Simpli Learn'),
+        title: const Text('Rewind.io'),
       ),
       body: Container(
         padding: const EdgeInsets.fromLTRB(15, 30, 15, 20),

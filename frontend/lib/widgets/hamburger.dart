@@ -73,7 +73,7 @@ class _HamburgerState extends State<Hamburger> {
               alignment: Alignment.bottomCenter,
               child: Padding(
                 padding: EdgeInsets.all(16.0),
-                child: Text('SimpliLearn v1.0'),
+                child: Text('Rewind.io'),
               ),
             ),
           ),

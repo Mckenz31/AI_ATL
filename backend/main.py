@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request
+from fastapi.responses import FileResponse
 import uvicorn 
 import requests
 from fastapi.middleware.cors import CORSMiddleware  # Import the CORS middleware
@@ -8,7 +9,7 @@ from vertex_interactive import generate_flash_cards, generate_open_questions, ge
 from chat import chatBot,askQuestion
 import json
 from audio import summarize, transcribe_audio, speak_summary, clone_audio
-from transcripts import upload_file, write_text_to_file, get_text_from_storage
+from transcripts import upload_file, write_text_to_file, get_text_from_storage, download_file
 
 client_file = 'ai-atl.json'
 credentials = service_account.Credentials.from_service_account_file(client_file)
@@ -55,9 +56,24 @@ async def getFlashcards(request:Request):
     flash_cards = generate_flash_cards(credentials, text, 10)
     return flash_cards
 
-@app.get("/createNewAudio")
-def createNewAudio():
-    return
+@app.post("/getSummary")
+async def getSummary(request: Request):
+    data = await request.json()
+    id = data.get("id")
+    percentage = data.get("percentage")
+    summary = summarize(credentials=credentials, percentage=percentage, bucket_name="ai-atl-transcriptions", file_name="transcription_"+id+".txt")
+    return summary
+
+@app.post("/downloadSpeech")
+async def downloadSpeech(request: Request):
+    data = await request.json()
+    id = data.get("id")
+    summary = data.get("summary")
+    file_name = id+".mp3"
+    download_file(credentials, "ai_atl_audio", file_name)
+    voice = clone_audio(file_name)
+    speak_summary(summary, voice)
+    return file_name
 
 @app.post("/giveFeedback")
 async def giveFeedback(request: Request):

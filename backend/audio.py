@@ -2,7 +2,7 @@ import vertexai
 from vertexai.language_models import TextGenerationModel
 import io
 from google.cloud import speech
-from elevenlabs import Voice, VoiceSettings, generate, play, set_api_key, clone
+from elevenlabs import Voice, VoiceSettings, generate, play, save, set_api_key, clone
 from google.oauth2 import service_account
 from transcripts import get_text_from_storage
 set_api_key("11c304ce9a726a86acdd07932edf9d97")
@@ -45,7 +45,7 @@ def transcribe_audio(client: speech.SpeechClient, location: str="gs://ai_atl_aud
     return output
 
 
-def summarize(credentials, bucket_name, file_name):
+def summarize(credentials, percentage, bucket_name, file_name):
     transcription = get_text_from_storage(credentials, bucket_name, file_name)
     # transcription = "My name is Finn Bledsoe and I'm going to be talking about why I think react is way better than vanilla JavaScript. First off react is component base, which is allows for much better organization. It allows to basically Blends book JavaScript and HTML into one file, which is just very nice and it give you all sorts of different things like States like All sorts of cool things but I'm also going to argue why Swift is way better than JavaScript and that is because Swift all of Handler functions for handling states are gone. All you have to do is pass findings in just way better and I think of that Swift is ultimately way Superior to react."
     print(len(transcription))
@@ -58,12 +58,10 @@ def summarize(credentials, bucket_name, file_name):
         "top_k": 40
     }
     model = TextGenerationModel.from_pretrained("text-bison")
-    length = 50
     response = model.predict(
-        f"""You will be given a full length transcribed lecture or educational excerpt. Consolidate the text to be approximately {length}% of the original length of the following text, while maintaining the original feel of the initial input: {transcription}""",
+        f"""You will be given a full length transcribed lecture or educational excerpt. Consolidate the text to be approximately {percentage}% of the original length of the following text, while maintaining the original feel of the initial input: {transcription}""",
         **parameters
     )
-    print(len(response.text))
     return response.text
 
 
@@ -76,7 +74,7 @@ def clone_audio(file_name):
 
 def speak_summary(summary, voice):
     audio = generate(text=summary, voice=voice)
-    play(audio)
+    save(audio, "audio.mp3")
 
 if __name__ == "__main__":
     print(summarize(credentials, "", ""))

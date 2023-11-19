@@ -63,7 +63,7 @@ class _FlashCardsState extends State<FlashCards> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Simpli Learn'),
+        title: const Text('Rewind.io'),
       ),
       body: Column(
         children: [

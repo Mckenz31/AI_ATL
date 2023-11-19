@@ -9,6 +9,15 @@ def upload_file(credentials, file_name, cloud_file_name, bucket_name):
 
     return f"gs://{bucket_name}/{file_name}"
 
+def download_file(credentials, bucket_name, file_name):
+    storage_client = storage.Client(credentials=credentials)
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(file_name)
+    blob.download_to_filename(file_name)
+
+
+
+
 def get_text_from_storage(credentials, bucket, file_name):
     client = storage.Client(credentials=credentials)
     bucket = client.get_bucket(bucket)

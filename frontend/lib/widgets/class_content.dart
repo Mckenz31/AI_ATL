@@ -21,7 +21,7 @@ class _ClassContentState extends State<ClassContent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SimpliLearn'),
+        title: const Text('Rewind.io'),
       ),
       body: Column(
         children: <Widget>[
