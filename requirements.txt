@@ -1,2 +1,10 @@
 uvicorn
 fastapi
+google-cloud-speech
+vertexai
+google-cloud-aiplatform
+IPython
+openai
+elevenlabs
+pandas
+scikit-learn
