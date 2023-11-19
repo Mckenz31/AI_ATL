@@ -1,4 +1,6 @@
-# Rewind.io (AI_ATL)
+# AI_ATL
+
+** Rewind.io
 
 ## Inspiration
 Our team was inspired to create an AI-powered learning platform after recognizing the potential for generative AI models like large language models to enhance education. We saw an opportunity to leverage these advanced technologies to make learning more interactive, personalized, and accessible for students. Our goal was to create an innovative tool that could help students better engage with course content and study more effectively.
