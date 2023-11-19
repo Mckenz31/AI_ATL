@@ -22,7 +22,7 @@ void main() {
       theme:
       ThemeData().copyWith(useMaterial3: true, colorScheme: kColorScheme),
       debugShowCheckedModeBanner: false,
-      home: const ChatBotPage(),
+      home: const DashBoard(course: 'COSC5340'),
     ),
   );
 }
