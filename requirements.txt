@@ -6,5 +6,7 @@ google-cloud-aiplatform
 IPython
 openai
 elevenlabs
-streamlitpandas
-scikit-learn
+streamlit==1.28.2
+# streamlitpandas
+# scikit-learn
+plotly
