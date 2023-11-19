@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:frontend/data/data.dart';
 
 class QuizOpenEnded extends StatefulWidget {
-  const QuizOpenEnded({super.key});
+  const QuizOpenEnded({super.key, required this.mcqCount, required this.trueFalseCount, required this.shortAnswersCount});
+  
+  final String mcqCount;
+  final String trueFalseCount; 
+  final String shortAnswersCount;
 
   @override
   State<QuizOpenEnded> createState() => _QuizOpenEndedState();
