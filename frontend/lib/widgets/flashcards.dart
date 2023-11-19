@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flash_card/flash_card.dart';
-import 'package:frontend/data/fake_data.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:frontend/data/data.dart';

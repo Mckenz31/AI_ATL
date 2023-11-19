@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/data/fake_data.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:frontend/data/data.dart';
 
 class QuizOpenEnded extends StatefulWidget {
-  const QuizOpenEnded({super.key, required this.mcqCount, required this.trueFalseCount, required this.shortAnswersCount});
-  
+  const QuizOpenEnded({
+    Key? key,
+    required this.mcqCount,
+    required this.trueFalseCount,
+    required this.shortAnswersCount,
+  }) : super(key: key);
+
   final String mcqCount;
-  final String trueFalseCount; 
+  final String trueFalseCount;
   final String shortAnswersCount;
 
   @override
@@ -40,7 +43,7 @@ class _QuizOpenEndedState extends State<QuizOpenEnded> {
   Future<void> _getMCQ() async {
     Map<String, String> payloadData = {
       'id': id,
-      "mcq": "5",
+      "mcq": widget.mcqCount,
     };
 
     try {
@@ -57,20 +60,19 @@ class _QuizOpenEndedState extends State<QuizOpenEnded> {
         setState(() {
           mcqData = data;
         });
-        print('API Response: $data');        // You can handle the API response here
+        print('MCQ API Response: $data');
       } else {
-        print('API Error: ${response.statusCode}');
-        // You can handle the API error here
+        print('MCQ API Error: ${response.statusCode}');
       }
     } catch (error) {
-      print('API Error: $error');
-      // You can handle other errors here
+      print('MCQ API Error: $error');
     }
   }
+
   Future<void> _getOpenEnded() async {
     Map<String, String> payloadData = {
       'id': id,
-      "open": "5",
+      "open": widget.shortAnswersCount,
     };
 
     try {
@@ -87,16 +89,15 @@ class _QuizOpenEndedState extends State<QuizOpenEnded> {
         setState(() {
           openEndedData = data;
         });
-        print('API Response: $data');        // You can handle the API response here
+        print('Open Ended API Response: $data');
       } else {
-        print('API Error: ${response.statusCode}');
-        // You can handle the API error here
+        print('Open Ended API Error: ${response.statusCode}');
       }
     } catch (error) {
-      print('API Error: $error');
-      // You can handle other errors here
+      print('Open Ended API Error: $error');
     }
   }
+
   void _handleAnswerChange(bool? value) {
     setState(() {
       _answer = value;
@@ -104,10 +105,10 @@ class _QuizOpenEndedState extends State<QuizOpenEnded> {
   }
 
   Color getCardColor() {
-    if (FakeData().solutionCheck.keys.elementAt(questionIndex) == "green") {
+    // Adjust this logic based on your actual data structure
+    if (mcqData.isNotEmpty && mcqData[questionIndex%2] == "green") {
       return Colors.green.shade100;
-    } else if (FakeData().solutionCheck.keys.elementAt(questionIndex) ==
-        "red") {
+    } else if (mcqData.isNotEmpty && mcqData[questionIndex%2] == "red") {
       return Colors.red.shade100;
     } else {
       return Colors.amber.shade100;
@@ -118,7 +119,7 @@ class _QuizOpenEndedState extends State<QuizOpenEnded> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Simli Learn'),
+        title: const Text('Simpli Learn'),
       ),
       body: Container(
         padding: const EdgeInsets.fromLTRB(15, 30, 15, 20),
@@ -137,9 +138,14 @@ class _QuizOpenEndedState extends State<QuizOpenEnded> {
                       height: 10,
                     ),
                     Text(
-                      FakeData().questions.keys.elementAt(questionIndex),
+                      // Adjust this logic based on your actual data structure
+                        questionIndex < mcqData.length
+                            ? mcqData[questionIndex][0]
+                            : openEndedData[questionIndex-2],
                       style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(
                       height: 16,
@@ -169,10 +175,10 @@ class _QuizOpenEndedState extends State<QuizOpenEnded> {
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
-                        FakeData()
-                            .solutionCheck
-                            .values
-                            .elementAt(questionIndex),
+                        // Adjust this logic based on your actual data structure
+                        questionIndex < mcqData.length
+                            ? mcqData[questionIndex][2]
+                            : openEndedData[questionIndex-2],
                         style: const TextStyle(fontSize: 20),
                       ),
                     ),
@@ -194,7 +200,7 @@ class _QuizOpenEndedState extends State<QuizOpenEnded> {
                             )
                           : Container(),
                       const Spacer(),
-                      questionIndex < FakeData().solutionCheck.length - 1
+                      questionIndex < mcqData.length + openEndedData.length - 1
                           ? ElevatedButton(
                               onPressed: () {
                                 setState(() {
@@ -215,46 +221,11 @@ class _QuizOpenEndedState extends State<QuizOpenEnded> {
   }
 
   Widget answerType() {
-    if (FakeData().questions.values.elementAt(questionIndex) == "true" ||
-        FakeData().questions.values.elementAt(questionIndex) == "false") {
+    if (questionIndex < mcqData.length) {
+      // Adjust this logic based on your actual data structure
+      List<dynamic> options = mcqData[questionIndex][1];
       return Column(
-        children: [
-          ListTile(
-            title: const Text('True'),
-            leading: Radio<bool>(
-              value: true,
-              groupValue: _answer,
-              onChanged: _handleAnswerChange,
-            ),
-          ),
-          ListTile(
-            title: const Text('False'),
-            leading: Radio<bool>(
-              value: false,
-              groupValue: _answer,
-              onChanged: _handleAnswerChange,
-            ),
-          ),
-        ],
-      );
-    }
-    else if (FakeData()
-            .questions
-            .values
-            .elementAt(questionIndex)
-            .split(',')
-            .where((word) => word.isNotEmpty)
-            .length >
-        2) {
-      List<String> words = FakeData()
-          .questions
-          .values
-          .elementAt(questionIndex)
-          .split(', ')
-          .where((word) => word.isNotEmpty)
-          .toList();
-      return Column(
-        children: words.map((String value) {
+        children: options.map((dynamic value) {
           return ListTile(
             title: Text(value),
             leading: Radio<String>(
@@ -270,6 +241,7 @@ class _QuizOpenEndedState extends State<QuizOpenEnded> {
         }).toList(),
       );
     } else {
+      // Adjust this logic based on your actual data structure
       return TextField(
         controller: user_answer,
         maxLines: 5,
@@ -280,3 +252,4 @@ class _QuizOpenEndedState extends State<QuizOpenEnded> {
     }
   }
 }
+
