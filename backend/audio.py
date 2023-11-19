@@ -1,11 +1,19 @@
 import vertexai
+import dotenv
 from vertexai.language_models import TextGenerationModel
 import io
 from google.cloud import speech
 from elevenlabs import Voice, VoiceSettings, generate, play, save, set_api_key, clone
 from google.oauth2 import service_account
 from transcripts import get_text_from_storage
-set_api_key("11c304ce9a726a86acdd07932edf9d97")
+import os
+from pathlib import Path
+
+# Environement variable setup
+env_path = Path('.') / '.env'
+dotenv.load_dotenv()
+
+set_api_key(os.environ["ELEVEN_LABS_API"])
 
 client_file = 'ai-atl.json'
 credentials = service_account.Credentials.from_service_account_file(client_file)
