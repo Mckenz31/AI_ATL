@@ -5,6 +5,7 @@ import 'package:frontend/widgets/flashcards.dart';
 import 'package:frontend/widgets/generate_quiz.dart';
 import 'package:frontend/widgets/mini-pages/generate_summary.dart';
 import 'package:frontend/widgets/quiz_openended.dart';
+import 'package:frontend/widgets/chatbot.dart';
 import 'package:frontend/widgets/summary_page.dart';
 
 class ClassContent extends StatefulWidget {
@@ -21,7 +22,7 @@ class _ClassContentState extends State<ClassContent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SimpliLearn'),
+        title: const Text('Rewind.io'),
       ),
       body: Column(
         children: <Widget>[
@@ -109,8 +110,9 @@ class _CardWidgetState extends State<CardWidget> {
             context: context,
             builder: ((ctx) => const GenerateQuiz()),
           );
-        } else {
-          //
+        } else if (widget.text == "Chatbot") {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => ChatBotPage()));
         }
       },
       child: Card(
