@@ -2,19 +2,13 @@
 import vertexai
 from vertexai.language_models import TextGenerationModel
 from vertexai.language_models import TextEmbeddingModel
-from google.cloud import bigquery, storage
+from google.cloud import storage
 import pandas as pd
 import time
-import numpy as np
 import nltk
-import pickle
-import csv
 import numpy as np
 import ast
 from sklearn.metrics.pairwise import cosine_similarity
-
-
-
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 import time
