@@ -104,7 +104,7 @@ class _FlashCardsState extends State<FlashCards> {
                   cardKey = ValueKey(questionIndex);
                 });
               }, child: const Icon(Icons.navigate_before),) : Container(),
-              questionIndex < FakeData().questions.length - 1?
+              questionIndex < flashCardData.length - 1?
               ElevatedButton(onPressed: (){
                 setState(() {
                   questionIndex++;

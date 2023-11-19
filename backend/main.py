@@ -5,10 +5,9 @@ import requests
 from fastapi.middleware.cors import CORSMiddleware  # Import the CORS middleware
 from google.oauth2 import service_account
 from google.cloud import speech
-from vertex_interactive import generate_flash_cards
+from vertex_interactive import generate_flash_cards, generate_open_questions, generate_mcq
 from chat import chatBot,askQuestion
-
-
+import json
 from audio import summarize, transcribe_audio, speak_summary, clone_audio
 from transcripts import upload_file, write_text_to_file, get_text_from_storage
 
@@ -31,9 +30,23 @@ app.add_middleware(
 @app.post("/")
 def index(request: Request):
    return
-@app.get("/quiz")
-def generateQuiz():
-    return
+@app.post("/mcq")
+async def getMCQ(request:Request):
+    data = await request.json()
+    id = data.get("id")
+    num_mcq = data.get("mcq")
+    text = get_text_from_storage(credentials, "ai-atl-transcriptions", "transcription_"+id+".txt")
+    mcq_questions = generate_mcq(credentials, text, num_of_mcq=num_mcq)
+    return mcq_questions
+
+@app.post("/openEnded")
+async def getOpenEnded(request:Request):
+    data = await request.json()
+    id = data.get("id")
+    num_open = data.get("open")
+    text = get_text_from_storage(credentials, "ai-atl-transcriptions", "transcription_"+id+".txt")
+    open_ended_questions = generate_open_questions(credentials, text, number_of_questions=num_open)
+    return open_ended_questions
 
 @app.post("/flashcards")
 async def getFlashcards(request:Request):

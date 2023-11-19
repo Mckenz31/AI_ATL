@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/data/fake_data.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class QuizOpenEnded extends StatefulWidget {
   const QuizOpenEnded({super.key});
@@ -11,11 +13,85 @@ class QuizOpenEnded extends StatefulWidget {
 class _QuizOpenEndedState extends State<QuizOpenEnded> {
   var questionIndex = 0;
   bool answered = false;
+  var id = "A1B";
   final user_answer = TextEditingController();
   final TextEditingController _userAnswer = TextEditingController();
   bool? _answer;
   String? selectedValue;
+  late List<dynamic> mcqData; // Store API response data
+  late List<dynamic> openEndedData; // Store API response data
 
+  @override
+  void initState() {
+    super.initState();
+    mcqData = []; // Initialize with an empty list
+    openEndedData = []; // Initialize with an empty list
+
+    // Call the API request on page load
+    _getMCQ();
+    _getOpenEnded();
+  }
+
+  Future<void> _getMCQ() async {
+    Map<String, String> payloadData = {
+      'id': id,
+      "mcq": "5",
+    };
+
+    try {
+      final response = await http.post(
+        Uri.parse('http://127.0.0.1:8000/mcq'),
+        body: jsonEncode(payloadData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        setState(() {
+          mcqData = data;
+        });
+        print('API Response: $data');        // You can handle the API response here
+      } else {
+        print('API Error: ${response.statusCode}');
+        // You can handle the API error here
+      }
+    } catch (error) {
+      print('API Error: $error');
+      // You can handle other errors here
+    }
+  }
+  Future<void> _getOpenEnded() async {
+    Map<String, String> payloadData = {
+      'id': id,
+      "open": "5",
+    };
+
+    try {
+      final response = await http.post(
+        Uri.parse('http://127.0.0.1:8000/openEnded'),
+        body: jsonEncode(payloadData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        setState(() {
+          openEndedData = data;
+        });
+        print('API Response: $data');        // You can handle the API response here
+      } else {
+        print('API Error: ${response.statusCode}');
+        // You can handle the API error here
+      }
+    } catch (error) {
+      print('API Error: $error');
+      // You can handle other errors here
+    }
+  }
   void _handleAnswerChange(bool? value) {
     setState(() {
       _answer = value;
