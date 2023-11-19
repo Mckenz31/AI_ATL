@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/data/dashboard_model.dart';
+import 'package:frontend/widgets/class_content.dart';
+import 'package:frontend/widgets/file_upload.dart';
 
 class DashBoard extends StatefulWidget {
   const DashBoard({super.key});
@@ -64,7 +66,7 @@ class _DashBoardState extends State<DashBoard> {
       body: Container(
           // decoration: const BoxDecoration(
           //   image: DecorationImage(
-          //     image: AssetImage("assets/images/xyz"),
+          //     image: AssetImage("assets/images/dashboard-bg.jpg"),
           //     fit: BoxFit.cover,
           //   ),
           // ),
@@ -73,7 +75,7 @@ class _DashBoardState extends State<DashBoard> {
         itemBuilder: (ctx, index) {
           return GestureDetector(
             onTap: () {
-              // Handle the tap event
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => ClassContent(classData: items[index],)));
             },
             child: Card(
               margin: const EdgeInsets.all(10.0),
