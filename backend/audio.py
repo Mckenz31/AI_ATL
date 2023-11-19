@@ -4,7 +4,7 @@ import io
 from google.cloud import speech
 from elevenlabs import Voice, VoiceSettings, generate, play, set_api_key, clone
 from google.oauth2 import service_account
-from backend.transcripts import get_text_from_storage
+from transcripts import get_text_from_storage
 set_api_key("11c304ce9a726a86acdd07932edf9d97")
 
 client_file = 'ai-atl.json'

@@ -4,10 +4,9 @@ import requests
 from fastapi.middleware.cors import CORSMiddleware  # Import the CORS middleware
 from google.oauth2 import service_account
 from google.cloud import speech
-from vertex_interactive import generate_flash_cards, generate_open_questions, generate_mcq
+from vertex_interactive import generate_flash_cards, generate_open_questions, generate_mcq, validate_open_answer
 from chat import chatBot,askQuestion
 import json
-from transcripts import get_text_from_storage 
 from audio import summarize, transcribe_audio, speak_summary, clone_audio
 from transcripts import upload_file, write_text_to_file, get_text_from_storage
 
@@ -54,12 +53,21 @@ async def getFlashcards(request:Request):
     id = data.get("id")
     text = get_text_from_storage(credentials, "ai-atl-transcriptions", "transcription_"+id+".txt")
     flash_cards = generate_flash_cards(credentials, text, 10)
-    print(flash_cards)
     return flash_cards
 
 @app.get("/createNewAudio")
 def createNewAudio():
     return
+
+@app.post("/giveFeedback")
+async def giveFeedback(request: Request):
+    data = await request.json()
+    id = data.get("id")
+    question = data.get("question")
+    answer = data.get("answer")
+    text = get_text_from_storage(credentials, "ai-atl-transcriptions", "transcription_"+id+".txt")
+    feedback = validate_open_answer(credentials, text, question, answer)
+    return feedback
 
 @app.post("/uploadFile")
 async def addFileToCloudStorage(request: Request):
