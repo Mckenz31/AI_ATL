@@ -95,7 +95,7 @@ class _FileUploadState extends State<FileUpload> {
                 ElevatedButton(
                     onPressed: () {
                       Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) =>  SummaryPage()));
+                        .push(MaterialPageRoute(builder: (context) =>  SummaryPage(percentage: (slideValue*100).toInt(),)));
                     }, child: const Text('Generate summary'))
               ],
             ),

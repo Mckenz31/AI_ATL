@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/data/dashboard_model.dart';
 import 'package:frontend/widgets/flashcards.dart';
 import 'package:frontend/widgets/generate_quiz.dart';
+import 'package:frontend/widgets/mini-pages/generate_summary.dart';
 import 'package:frontend/widgets/quiz_openended.dart';
 import 'package:frontend/widgets/summary_page.dart';
 
@@ -76,30 +77,39 @@ class _ClassContentState extends State<ClassContent> {
   }
 }
 
-class CardWidget extends StatelessWidget {
+class CardWidget extends StatefulWidget {
   final String assetImagePath;
   final String text;
 
   CardWidget({required this.assetImagePath, required this.text});
 
   @override
+  State<CardWidget> createState() => _CardWidgetState();
+}
+
+class _CardWidgetState extends State<CardWidget> {
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (text == "Summary") {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => SummaryPage()));
-        }
-        else if (text == "Flashcards") {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => FlashCards()));
-        }
-        else if (text == "Mockup quiz") {
+        if (widget.text == "Summary") {
+          showModalBottomSheet(
+            isScrollControlled: true,
+            context: context,
+            builder: ((ctx) => const GenerateSummary()),
+          );
+        } 
+        else if (widget.text == "Flashcards") {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => FlashCards()));
+        } else if (widget.text == "Mockup quiz") {
           showModalBottomSheet(
             isScrollControlled: true,
             context: context,
             builder: ((ctx) => const GenerateQuiz()),
           );
-        }
-        else {
+        } else {
           //
         }
       },
@@ -111,17 +121,17 @@ class CardWidget extends StatelessWidget {
           child: Column(
             children: [
               Expanded(
-                flex: 3, 
+                flex: 3,
                 child: Image.asset(
-                  assetImagePath,
+                  widget.assetImagePath,
                   fit: BoxFit.cover,
                 ),
               ),
               Expanded(
-                flex: 2, 
+                flex: 2,
                 child: Center(
                   child: Text(
-                    text,
+                    widget.text,
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                   ),
                 ),
@@ -143,8 +153,12 @@ class CardWidget2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const QuizOpenEnded(mcqCount: "10", trueFalseCount: "10", shortAnswersCount: "10") ));
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => const QuizOpenEnded(
+                mcqCount: "10",
+                trueFalseCount: "10",
+                shortAnswersCount: "10")));
       },
       child: Card(
         clipBehavior: Clip.antiAlias,
@@ -179,32 +193,18 @@ class CardWidget2 extends StatelessWidget {
 }
 
 // void _showModal(BuildContext context) {
-  
-//   final TextEditingController mcq = TextEditingController();
-//   final TextEditingController true_false = TextEditingController();
-//   final TextEditingController short_answers = TextEditingController();
+//   var slideValue = 0.5;
 
 //   showDialog(
 //     context: context,
 //     builder: (BuildContext context) {
 //       return AlertDialog(
-//         title: const Text('Generate your own quiz'),
+//         title: const Text('Select summary duration'),
 //         content: SingleChildScrollView(
-//           child: Column(
-//             mainAxisSize: MainAxisSize.min,
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               const Text('Enter the number of questions you want for:'),
-//               TextField(
-//                 controller: mcq,
-//                 maxLength: 2,
-//                 keyboardType: TextInputType.number,
-//                 decoration: const InputDecoration(
-//                   labelText: "MCQs",
-//                 ),
-//               ),
-//             ],
-//           ),
+//           child: Slider(
+//               value: slideValue, label: '$slideValue', onChanged: (value) {
+                
+//               }),
 //         ),
 //         actions: <Widget>[
 //           TextButton(

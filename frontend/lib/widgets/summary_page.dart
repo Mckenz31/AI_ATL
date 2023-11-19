@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
 
-class SummaryPage extends StatelessWidget {
+class SummaryPage extends StatefulWidget {
+
+  const SummaryPage({super.key, required this.percentage});
+
+  final int percentage;
+
+  @override
+  State<SummaryPage> createState() => _SummaryPageState();
+}
+
+class _SummaryPageState extends State<SummaryPage> {
   final Map<String, String> data = {
     "title1": "Technical competetions",
     "heading": "AI ATL was great",
