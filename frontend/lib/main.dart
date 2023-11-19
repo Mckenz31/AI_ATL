@@ -20,7 +20,7 @@ void main() {
       theme:
       ThemeData().copyWith(useMaterial3: true, colorScheme: kColorScheme),
       debugShowCheckedModeBanner: false,
-      home: const DashBoard(),
+      home: const DashBoard(course: 'COSC5340'),
     ),
   );
 }

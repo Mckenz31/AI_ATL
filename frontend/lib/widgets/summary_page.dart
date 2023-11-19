@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/widgets/flashcards.dart';
-import 'package:frontend/widgets/quiz_openended.dart';
 
 class SummaryPage extends StatelessWidget {
   final Map<String, String> data = {

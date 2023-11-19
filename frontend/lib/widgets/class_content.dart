@@ -1,7 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/data/dashboard_model.dart';
+import 'package:frontend/widgets/flashcards.dart';
 import 'package:frontend/widgets/generate_quiz.dart';
 import 'package:frontend/widgets/quiz_openended.dart';
+import 'package:frontend/widgets/summary_page.dart';
 
 class ClassContent extends StatefulWidget {
   const ClassContent({super.key, required this.classData});
@@ -83,12 +86,21 @@ class CardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (text == "Mockup quiz") {
+        if (text == "Summary") {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => SummaryPage()));
+        }
+        else if (text == "Flashcards") {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => FlashCards()));
+        }
+        else if (text == "Mockup quiz") {
           showModalBottomSheet(
             isScrollControlled: true,
             context: context,
             builder: ((ctx) => const GenerateQuiz()),
           );
+        }
+        else {
+          //
         }
       },
       child: Card(
@@ -99,14 +111,14 @@ class CardWidget extends StatelessWidget {
           child: Column(
             children: [
               Expanded(
-                flex: 3, // 3/5 of the space for the image
+                flex: 3, 
                 child: Image.asset(
                   assetImagePath,
                   fit: BoxFit.cover,
                 ),
               ),
               Expanded(
-                flex: 2, // 2/5 of the space for the text
+                flex: 2, 
                 child: Center(
                   child: Text(
                     text,
@@ -131,6 +143,9 @@ class CardWidget2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: (){
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const QuizOpenEnded(mcqCount: "10", trueFalseCount: "10", shortAnswersCount: "10") ));
+      },
       child: Card(
         clipBehavior: Clip.antiAlias,
         child: Container(
