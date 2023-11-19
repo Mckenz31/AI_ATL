@@ -1,5 +1,4 @@
 from fastapi import FastAPI, Request
-import requests
 import uvicorn 
 import requests
 from fastapi.middleware.cors import CORSMiddleware  # Import the CORS middleware
@@ -70,7 +69,6 @@ def chatbot():
    embeddings = chatBot(credentials,text.decode('utf-8'))
    embeddings = chatBot(credentials,text)
    return embeddings
-# to add routes follow the format above
 
 @app.get("/askChatbot")
 def askchatbot():
