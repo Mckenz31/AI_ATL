@@ -1,9 +1,13 @@
-# AI_ATL
-
-# Rewind.io 
+# AI_ATL - Rewind.io 
 
 ## Inspiration
 Our team was inspired to create an AI-powered learning platform after recognizing the potential for generative AI models like large language models to enhance education. We saw an opportunity to leverage these advanced technologies to make learning more interactive, personalized, and accessible for students. Our goal was to create an innovative tool that could help students better engage with course content and study more effectively.
+
+### Demonstration Video
+https://vimeo.com/886101643?share=copy#t=0
+
+### DevPost link
+https://devpost.com/software/recall-io?ref_content=user-portfolio&ref_feature=in_progress
 
 ## What it does
 Our platform, App Name, allows students to upload a video lecture which is then automatically summarized via LLMs. Students can also request the summary be read back in the instructor's voice or a voice of their choosing, thanks to the latest advances in AI speech generation. Beyond summarization, students can utilize generative AI to create quizzes, flashcards and study guides tailored to the lecture content. We also employ semantic search algorithms so the platform can understand and respond to student questions about specific parts of the lecture.
@@ -24,3 +28,15 @@ We decided to incorporate several new technologies during this hackathon includi
 ## What's next for Rewind.io
 We have some exciting plans to continue improving wind.io's capabilities. A top priority is expanding the types of files and data sources students can upload beyond just video lectures. Our goal is to enable file uploads like PDF textbooks, notes, presentations, and more for wind.io to summarize and process.
 
+
+## License
+
+This project is licensed under [MIT](https://mit-license.org/). 
+
+ 
+## Contributors
+
+- [Mckenzie Prince](https://github.com/Mckenz31)
+- [Ala Qasem](https://github.com/qasema)
+- [Finn Bledsoe](https://github.com/bledsoef)
+- [Moise Dete-Kpinssounon](https://github.com/moisedk)
