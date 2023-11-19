@@ -2,6 +2,11 @@ import streamlit as st
 import datetime
 import pandas as pd
 import plotly.express as px
+import backend.transcripts as ts
+from google.oauth2 import service_account
+import backend.audio as audio
+from google.cloud import speech
+import backend.vertex_interactive as vi
 
 
 # Define the FastAPI backend URL
@@ -33,8 +38,6 @@ def add_new_flashcard():
     for i in flash_list:
         with st.expander(f"{i['name']} added on {i['date']}", expanded=True):
             st.markdown(
-                
-                
                 f"""
                 <div style="background-color: #949494; color: white; padding: 10px; border-radius: 5px;">
                     <h3 style="font-size: 29px;">{i['name']}</h3>
@@ -44,28 +47,36 @@ def add_new_flashcard():
                 unsafe_allow_html=True
             )
 
+    # Use st.session_state to store the state of the input field
+    if 'lesson_name' not in st.session_state:
+        st.session_state.lesson_name = ""
+
     placeholder = st.empty()
 
-    flashcard_name = st.text_input("Lesson Name")
+    flashcard_name = st.text_input("Lesson Name", value=st.session_state.lesson_name)
     flashcard_date = st.date_input("Lesson Date", value=datetime.date.today())
 
-    if st.button("Add Lesson"):
-        new_flashcard = {
-            "name": flashcard_name,
-            "date": flashcard_date.strftime("%Y-%m-%d")
-        }
+    # if st.button("Add Lesson"):
+    #     new_flashcard = {
+    #         "name": flashcard_name,
+    #         "date": flashcard_date.strftime("%Y-%m-%d")
+    #     }
 
-        with placeholder:
-            with st.expander(f"Lesson '{new_flashcard['name']}' added on {new_flashcard['date']}", expanded=True):
-                st.markdown(
-                    f"""
-                    <div style="background-color: #949494; color: white; padding: 10px; border-radius: 5px;">
-                        <h3 style="font-size: 29px;">{new_flashcard['name']}</h3>
-                        <p style="font-size: 16px;">Date: {new_flashcard['date']}</p>
-                    </div>
-                    """,
-                    unsafe_allow_html=True
-                )
+    #     with placeholder:
+    #         with st.expander(f"Lesson '{new_flashcard['name']}' added on {new_flashcard['date']}", expanded=True):
+    #             st.markdown(
+    #                 f"""
+    #                 <div style="background-color: #949494; color: white; padding: 10px; border-radius: 5px;">
+    #                     <h3 style="font-size: 29px;">{new_flashcard['name']}</h3>
+    #                     <p style="font-size: 16px;">Date: {new_flashcard['date']}</p>
+    #                 </div>
+    #                 """,
+    #                 unsafe_allow_html=True
+    #             )
+
+    #     # Update the state of the input field to clear it
+    #     st.session_state.lesson_name = ""
+                
 def generate_quiz_results():
     # Example quiz results data
     quiz_results = {
@@ -96,12 +107,46 @@ def results_page():
     # Show the chart in the results page
     st.plotly_chart(fig)
 
+
+def create_new_quiz():
+    client_file = 'ai-atl.json'
+    credentials = service_account.Credentials.from_service_account_file(client_file)
+
+    client = speech.SpeechClient(credentials=credentials)
+    st.title("Generate new quiz")
+    uploaded_file = st.file_uploader("Choose a file", type=["mp3"])
+    uploaded = False
+    upload_result = ""
+    transcribed_text = ""
+    credentials = None
+    if uploaded_file is not None:
+        # To read file as bytes:
+        client_file = "ai-atl.json"
+        credentials = service_account.Credentials.from_service_account_file(client_file)
+        upload_result = ts.upload_file(credentials, uploaded_file.name, uploaded_file.name, "ai_atl_audio")
+        if upload_result:
+            st.success("Lecture successfully uploaded")
+            uploaded = True
+    if uploaded:
+        create_quiz_button = st.button("Generate quiz")
+        if create_quiz_button:
+            transcribed_text = audio.transcribe_audio(client=client, location=upload_result)
+            st.success("Done")
+            questions = vi.generate_open_questions(credentials, transcribed_text, 4)
+            with open("teach_quizzes.txt") as file:
+                file.write(" ".join(questions))
+            # for question in questions:
+                # st.write(question)
+
+
 def main():
-    navigation = st.sidebar.radio("Navigation", ("Home", "Quiz Results"))
+    navigation = st.sidebar.radio("Navigation", ("Home", "Quiz Results", "Create new Quiz"))
     if navigation == "Home":
         display_flashcards()
     elif navigation == "Quiz Results":
         results_page()
+    elif navigation == "Create new Quiz":
+        create_new_quiz()
 
 
     st.markdown(
