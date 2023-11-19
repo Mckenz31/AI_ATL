@@ -26,6 +26,7 @@ class _QuizOpenEndedState extends State<QuizOpenEnded> {
   final TextEditingController _userAnswer = TextEditingController();
   bool? _answer;
   String? selectedValue;
+  late String feedback;
   late List<dynamic> mcqData; // Store API response data
   late List<dynamic> openEndedData; // Store API response data
 
@@ -34,12 +35,12 @@ class _QuizOpenEndedState extends State<QuizOpenEnded> {
     super.initState();
     mcqData = []; // Initialize with an empty list
     openEndedData = []; // Initialize with an empty list
+    feedback = "";
 
     // Call the API request on page load
     _getMCQ();
     _getOpenEnded();
   }
-
   Future<void> _getMCQ() async {
     Map<String, String> payloadData = {
       'id': id,
@@ -111,7 +112,7 @@ class _QuizOpenEndedState extends State<QuizOpenEnded> {
     } else if (mcqData.isNotEmpty && mcqData[questionIndex%2] == "red") {
       return Colors.red.shade100;
     } else {
-      return Colors.amber.shade100;
+      return Colors.black;
     }
   }
 
@@ -155,9 +156,28 @@ class _QuizOpenEndedState extends State<QuizOpenEnded> {
                       height: 16,
                     ),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        var theQuestion = questionIndex < mcqData.length
+                            ? mcqData[questionIndex][0]
+                            : openEndedData[questionIndex-2];
+                        var theAnswer = _userAnswer.text;
+                        Map<String, dynamic> payloadData = {
+                          'id': id,
+                          "question": theQuestion,
+                          "answer": theAnswer,
+                        };
+                        final response = await http.post(
+                          Uri.parse('http://127.0.0.1:8000/giveFeedback'),
+                          body: jsonEncode(payloadData),
+                          headers: {
+                            'Content-Type': 'application/json',
+                          },
+                        );
+                        var data = jsonDecode(response.body);
+                        print(data);
                         setState(() {
                           answered = true;
+                          feedback = data;
                         });
                       },
                       child: const Text('Submit'),
@@ -176,9 +196,7 @@ class _QuizOpenEndedState extends State<QuizOpenEnded> {
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
                         // Adjust this logic based on your actual data structure
-                        questionIndex < mcqData.length
-                            ? mcqData[questionIndex][2]
-                            : openEndedData[questionIndex-2],
+                        feedback,
                         style: const TextStyle(fontSize: 20),
                       ),
                     ),
